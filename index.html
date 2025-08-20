@@ -56,18 +56,18 @@
                 </div>
             </section>
 
-            <!-- Step 3: Sample Upload -->
+            <!-- Step 3: Sample Upload & Annotation -->
             <section class="step disabled" id="step-3">
                 <div class="step-header">
                     <span class="step-number">3</span>
-                    <h2>Upload Sample Pattern</h2>
+                    <h2>Upload & Annotate Sample</h2>
                 </div>
                 <div class="instruction-box">
-                    <h3>📸 Upload a sample showing:</h3>
+                    <h3>📸 Upload a sample and annotate it:</h3>
                     <ul>
-                        <li>Question text</li>
-                        <li>Question number format</li>
-                        <li>MCQ options (A, B, C, D)</li>
+                        <li><span class="color-red">🔴 Red rectangles</span> around question text</li>
+                        <li><span class="color-black">⚫ Black rectangles</span> around each MCQ option</li>
+                        <li><span class="color-green">🟢 Green rectangle</span> around the whole question block</li>
                     </ul>
                 </div>
                 <div class="upload-zone" id="sample-upload">
@@ -75,6 +75,7 @@
                         <div class="upload-icon">🖼️</div>
                         <h3>Drop sample screenshot here</h3>
                         <p>or click to browse</p>
+                        <small>Image files only</small>
                     </div>
                     <input type="file" id="sample-file" accept="image/*" hidden>
                 </div>
@@ -92,10 +93,12 @@
                     <div class="slider-group">
                         <label>Detection Sensitivity: <span id="sensitivity-value">70%</span></label>
                         <input type="range" id="sensitivity-slider" min="30" max="95" value="70">
+                        <small>Higher = more strict pattern matching</small>
                     </div>
                     <div class="slider-group">
-                        <label>Watermark Filter: <span id="filter-value">50%</span></label>
+                        <label>Content Filter: <span id="filter-value">50%</span></label>
                         <input type="range" id="filter-slider" min="10" max="90" value="50">
+                        <small>Higher = more aggressive filtering</small>
                     </div>
                 </div>
                 <div id="pattern-results" class="pattern-display"></div>
