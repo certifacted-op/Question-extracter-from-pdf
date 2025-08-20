@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worksheet Question Extractor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 Worksheet Question Extractor</h1>
+            <p>Upload worksheets and extract questions with MCQ options automatically</p>
+        </header>
+
+        <main>
+            <!-- Step 1: File Upload -->
+            <section class="step" id="step-1">
+                <div class="step-header">
+                    <span class="step-number">1</span>
+                    <h2>Upload Worksheet</h2>
+                </div>
+                <div class="upload-zone" id="main-upload">
+                    <div class="upload-content">
+                        <div class="upload-icon">📄</div>
+                        <h3>Drop your worksheet here</h3>
+                        <p>or click to browse files</p>
+                        <small>Supports PDF, PNG, JPG files</small>
+                    </div>
+                    <input type="file" id="main-file" accept=".pdf,.png,.jpg,.jpeg" hidden>
+                </div>
+                <div id="main-preview" class="file-preview"></div>
+            </section>
+
+            <!-- Step 2: Processing Mode -->
+            <section class="step disabled" id="step-2">
+                <div class="step-header">
+                    <span class="step-number">2</span>
+                    <h2>Select Processing Mode</h2>
+                </div>
+                <div class="mode-selection">
+                    <label class="mode-option">
+                        <input type="radio" name="mode" value="text">
+                        <div class="mode-content">
+                            <h3>Text Selection Mode</h3>
+                            <p>Extract selectable text from PDFs (faster)</p>
+                        </div>
+                    </label>
+                    <label class="mode-option">
+                        <input type="radio" name="mode" value="ocr">
+                        <div class="mode-content">
+                            <h3>OCR Mode</h3>
+                            <p>Extract text from images and scanned PDFs</p>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Step 3: Sample Upload -->
+            <section class="step disabled" id="step-3">
+                <div class="step-header">
+                    <span class="step-number">3</span>
+                    <h2>Upload Sample Pattern</h2>
+                </div>
+                <div class="instruction-box">
+                    <h3>📸 Upload a sample showing:</h3>
+                    <ul>
+                        <li>Question text</li>
+                        <li>Question number format</li>
+                        <li>MCQ options (A, B, C, D)</li>
+                    </ul>
+                </div>
+                <div class="upload-zone" id="sample-upload">
+                    <div class="upload-content">
+                        <div class="upload-icon">🖼️</div>
+                        <h3>Drop sample screenshot here</h3>
+                        <p>or click to browse</p>
+                    </div>
+                    <input type="file" id="sample-file" accept="image/*" hidden>
+                </div>
+                <div id="sample-preview" class="file-preview"></div>
+                <button id="analyze-sample" class="btn btn-primary" disabled>Analyze Pattern</button>
+            </section>
+
+            <!-- Step 4: Pattern Analysis -->
+            <section class="step disabled" id="step-4">
+                <div class="step-header">
+                    <span class="step-number">4</span>
+                    <h2>Pattern Analysis</h2>
+                </div>
+                <div class="analysis-controls">
+                    <div class="slider-group">
+                        <label>Detection Sensitivity: <span id="sensitivity-value">70%</span></label>
+                        <input type="range" id="sensitivity-slider" min="30" max="95" value="70">
+                    </div>
+                    <div class="slider-group">
+                        <label>Watermark Filter: <span id="filter-value">50%</span></label>
+                        <input type="range" id="filter-slider" min="10" max="90" value="50">
+                    </div>
+                </div>
+                <div id="pattern-results" class="pattern-display"></div>
+                <button id="extract-btn" class="btn btn-primary" disabled>Extract Questions</button>
+            </section>
+
+            <!-- Step 5: Processing -->
+            <section class="step disabled" id="step-5">
+                <div class="step-header">
+                    <span class="step-number">5</span>
+                    <h2>Processing</h2>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div id="progress-text" class="progress-text">Ready to process...</div>
+                </div>
+                <div id="processing-stats" class="stats-grid"></div>
+            </section>
+
+            <!-- Step 6: Results -->
+            <section class="step disabled" id="step-6">
+                <div class="step-header">
+                    <span class="step-number">6</span>
+                    <h2>Extracted Results</h2>
+                </div>
+                <div class="results-container">
+                    <div class="results-tabs">
+                        <button class="tab-btn active" data-tab="preview">Preview</button>
+                        <button class="tab-btn" data-tab="list">Question List</button>
+                        <button class="tab-btn" data-tab="dict">Python Dict</button>
+                    </div>
+                    <div class="tab-content active" id="preview-tab">
+                        <div id="questions-preview" class="questions-preview"></div>
+                    </div>
+                    <div class="tab-content" id="list-tab">
+                        <pre id="questions-list"></pre>
+                    </div>
+                    <div class="tab-content" id="dict-tab">
+                        <pre id="questions-dict"></pre>
+                    </div>
+                    <div class="download-controls">
+                        <button id="copy-list" class="btn btn-secondary">Copy List</button>
+                        <button id="copy-dict" class="btn btn-secondary">Copy Dictionary</button>
+                        <button id="download-json" class="btn btn-primary">Download JSON</button>
+                        <button id="download-py" class="btn btn-primary">Download Python</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
+    <script src="https://docs.opencv.org/4.8.0/opencv.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
